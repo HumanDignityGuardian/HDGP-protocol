@@ -131,3 +131,25 @@ HDGP 希望像 TLS 之于网络安全那样，长期演化为：
 - 在 `spec/` 中明确 HDGP 内部采用的伦理基线与冲突处理原则；  
 - 在 `HDGP_OPEN_FRAMEWORK.md` 中详细描述 Meta+Skill+Workflow+Engine 协作方式与安全边界。
 
+---
+
+## 维护者与署名
+
+- **HDGP Architect / Maintainer**：Yvaine He  
+- **GitHub 组织**：`HumanDignityGuardian`
+
+欢迎通过 Issue 与 Pull Request 参与共建。
+
+---
+
+## 许可证
+
+- **代码与实现**：  
+  - 采用 **Apache License 2.0**。  
+  - 详见仓库根目录下的 `LICENSE` 文件。
+
+- **白皮书与协议原文**：  
+  - 《人类尊严守护协议 (Human Dignity Guardian Protocol, HDGP)》及相关白皮书文本采用 **CC BY-NC-ND 4.0** 许可；  
+  - 著作权归 **Yvaine He** 所有。  
+  - 在任何再传播或引用中，请保留原作者署名与许可信息。
+
