@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HDGP · Human Dignity Guardian Protocol</title>
+    <meta
+      name="description"
+      content="Human Dignity Guardian Protocol (HDGP)：奇点时代的文明防火墙与人机共生守则。"
+    />
+    <style>
+      :root {
+        --bg: #050814;
+        --bg-alt: #0b1022;
+        --card-bg: #111827;
+        --accent: #38bdf8;
+        --accent-soft: rgba(56, 189, 248, 0.14);
+        --accent-strong: rgba(56, 189, 248, 0.35);
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --border: #1f2933;
+        --danger: #f97373;
+        --success: #4ade80;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+          "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top, #0f172a 0, #020617 50%, #000 100%);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body.lang-en .lang-zh {
+        display: none;
+      }
+
+      body.lang-en .lang-en {
+        display: inline;
+      }
+
+      body.lang-zh .lang-zh {
+        display: inline;
+      }
+
+      body.lang-zh .lang-en {
+        display: none;
+      }
+
+      .lang-toggle {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 11px;
+      }
+
+      .lang-toggle button {
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        background: rgba(15, 23, 42, 0.8);
+        color: var(--muted);
+        padding: 2px 10px;
+        cursor: pointer;
+      }
+
+      .lang-toggle button.active {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: rgba(56, 189, 248, 0.12);
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .page {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 32px 16px 72px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 30%, #f9fafb 0, #38bdf8 30%, #020617 70%);
+        box-shadow: 0 0 24px rgba(56, 189, 248, 0.6);
+        position: relative;
+      }
+
+      .logo-mark::after {
+        content: "";
+        position: absolute;
+        inset: 7px;
+        border-radius: inherit;
+        border: 1px solid rgba(15, 23, 42, 0.8);
+      }
+
+      .logo-text-main {
+        font-weight: 600;
+        letter-spacing: 0.03em;
+      }
+
+      .logo-text-sub {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .tagline {
+        font-size: 12px;
+        color: var(--muted);
+        text-align: right;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.4fr);
+        gap: 20px;
+      }
+
+      @media (max-width: 900px) {
+        main {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .tagline {
+          text-align: left;
+        }
+      }
+
+      .hero-card {
+        border-radius: 18px;
+        padding: 22px 22px 20px;
+        background: radial-gradient(circle at top left, #0b1120, #020617 60%);
+        border: 1px solid var(--border);
+        box-shadow: 0 28px 80px rgba(0, 0, 0, 0.9);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-card::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+          radial-gradient(circle at 15% 0, rgba(56, 189, 248, 0.25), transparent 60%),
+          radial-gradient(circle at 85% 100%, rgba(129, 140, 248, 0.18), transparent 60%);
+        opacity: 0.9;
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-title {
+        font-size: 24px;
+        font-weight: 650;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+
+      .hero-subtitle {
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 20px;
+      }
+
+      .hero-highlight {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .hero-highlight span {
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+        gap: 16px;
+        margin-top: 12px;
+      }
+
+      @media (max-width: 900px) {
+        .hero-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .hero-badge {
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 14px;
+        padding: 10px 12px;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        font-size: 12px;
+      }
+
+      .hero-badge strong {
+        display: block;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+
+      .hero-badge-main {
+        font-size: 13px;
+        color: #e5e7eb;
+      }
+
+      .hero-pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .pill {
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(51, 65, 85, 0.9);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .pill-soft {
+        background: rgba(15, 23, 42, 0.6);
+      }
+
+      .panel {
+        border-radius: 16px;
+        padding: 16px 16px 14px;
+        background: radial-gradient(circle at top, #020617, #020617 60%, #000 100%);
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .panel h2 {
+        font-size: 14px;
+        margin: 0 0 8px;
+        font-weight: 600;
+      }
+
+      .panel p {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0 0 6px;
+      }
+
+      .panel ul {
+        padding-left: 18px;
+        margin: 4px 0 0;
+      }
+
+      .panel li {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 3px;
+      }
+
+      .panel li strong {
+        color: #e5e7eb;
+      }
+
+      .section {
+        margin-top: 18px;
+      }
+
+      .section h3 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        margin: 0 0 6px;
+      }
+
+      .section p {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0 0 4px;
+      }
+
+      .columns-2 {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      @media (max-width: 900px) {
+        .columns-2 {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
+      }
+
+      .badge {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(75, 85, 99, 0.9);
+        color: var(--muted);
+      }
+
+      .badge-green {
+        border-color: rgba(74, 222, 128, 0.7);
+        color: #bbf7d0;
+      }
+
+      .badge-orange {
+        border-color: rgba(249, 115, 22, 0.8);
+        color: #fed7aa;
+      }
+
+      .small {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      code {
+        font-size: 12px;
+        padding: 1px 4px;
+        border-radius: 4px;
+        background: rgba(56, 189, 248, 0.1);
+        color: var(--accent);
+      }
+
+      footer {
+        margin-top: 36px;
+        font-size: 11px;
+        color: var(--muted);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: space-between;
+        border-top: 1px solid rgba(31, 41, 55, 0.8);
+        padding-top: 10px;
+      }
+    </style>
+  </head>
+  <body class="lang-en">
+    <div class="page">
+      <header>
+        <div class="logo">
+          <div class="logo-mark"></div>
+          <div>
+            <div class="logo-text-main">HDGP · Human Dignity Guardian Protocol</div>
+            <div class="logo-text-sub">人类尊严守护协议 · Genesis Edition V0.1</div>
+          </div>
+        </div>
+        <div class="tagline">
+          <div class="lang-toggle" id="langToggle">
+            <span>Language:</span>
+            <button data-lang="en" class="active">EN</button>
+            <button data-lang="zh">中文</button>
+          </div>
+          <div>
+            <span class="lang-en">“The system may withhold algorithmic answers, but must always preserve human dignity.”</span>
+            <span class="lang-zh">“可以不提供算法，但必须保留尊严。”</span>
+          </div>
+          <div class="small">
+            Whitepaper Timestamp: TSA-01-20260312660192471 / 93423
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero-card">
+          <div class="hero-inner">
+            <div class="hero-highlight">
+              <span class="lang-en">A civilization‑grade firewall for the age of singularity</span>
+              <span class="lang-zh">奇点时代的文明防火墙 · <span>在硅基浪潮中锚定碳基灵魂</span></span>
+            </div>
+            <h1 class="hero-title">
+              <span class="lang-en">Human Dignity Guardian Protocol (HDGP)</span>
+              <span class="lang-zh">人类尊严守护协议（HDGP）</span>
+            </h1>
+            <p class="hero-subtitle">
+              <span class="lang-en">
+                When machines can answer almost anything, HDGP exists to protect not “perfect answers”,
+                but the **right to choose, even to be wrong**, and the **dignity of remaining human**.
+              </span>
+              <span class="lang-zh">
+                当机器可以解答一切时，我们要为人类保留的，不是“正确答案”，而是
+                **选择错误的权利** 和 **仍然作为人的尊严**。
+              </span>
+            </p>
+
+            <div class="hero-grid">
+              <div class="hero-badge">
+                <strong>Supreme Directive</strong>
+                <div class="hero-badge-main">
+                  <span class="lang-en">
+                    Human consciousness is unquantifiable; human free will is forever superior to any system algorithm.
+                    <br />The system may withhold algorithmic answers, but must always preserve human dignity.
+                  </span>
+                  <span class="lang-zh">
+                    人类意识不可量化，自由意志永远高于系统算法。
+                    <br />可以不提供算法，但必须保留尊严。
+                  </span>
+                </div>
+                <div class="hero-pill-row">
+                  <span class="pill"><span class="lang-en">Charter / Core Charter</span><span class="lang-zh">Charter · 核心宪章</span></span>
+                  <span class="pill">HDGP Core Rules</span>
+                  <span class="pill-soft">Human–Machine Symbiosis</span>
+                </div>
+              </div>
+
+          <div class="hero-badge">
+            <strong>What HDGP Provides</strong>
+            <div class="hero-badge-main">
+              <span class="lang-en">
+                An integrable “dignity firewall”: a full mapping from charter → principles → rules → bundles → strategies → workflows,
+                together with reference gateway / Engine / audit and certification frameworks.
+              </span>
+              <span class="lang-zh">
+                一套可被集成的“尊严防火墙”：  
+                从宪章 → 原则 → 规则 → 规则包 → 策略 → 工作流的完整映射，  
+                以及对应的网关 / 引擎 / 审计与认证框架。
+              </span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel">
+          <h2>
+            <span class="lang-en">Who Is HDGP For?</span>
+            <span class="lang-zh">HDGP 适用于谁？</span>
+          </h2>
+          <p>
+            <span class="lang-en">Any system that outputs information, advice, or decisions to humans – not only large language models:</span>
+            <span class="lang-zh">任何会“向人输出信息、建议或决策”的系统，而不仅仅是大模型：</span>
+          </p>
+          <ul>
+            <li>
+              <span class="lang-en">Applications / agents / bots powered by LLMs</span>
+              <span class="lang-zh">使用 LLM 的应用 / Agent / Bot</span>
+            </li>
+            <li>
+              <span class="lang-en">Traditional Web / app / desktop modules such as recommendation, auto‑reply, or notifications</span>
+              <span class="lang-zh">传统 Web / App / 桌面应用中的推荐、自动回复、通知等模块</span>
+            </li>
+            <li>
+              <span class="lang-en">High‑risk systems in healthcare, finance, education, public services, etc.</span>
+              <span class="lang-zh">医疗、金融、教育、政务等高风险系统</span>
+            </li>
+            <li>
+              <span class="lang-en">Social platforms, chat applications, community systems</span>
+              <span class="lang-zh">社交平台、聊天软件、社区系统</span>
+            </li>
+            <li>
+              <span class="lang-en">Internal business systems, operations scripts, and automation flows</span>
+              <span class="lang-zh">内部业务系统、运营脚本与自动化流程</span>
+            </li>
+          </ul>
+          <p class="small">
+            <span class="lang-en">
+              As long as there is a chain from “system output → humans see / act on it”, HDGP can serve as an optional but verifiable dignity protection layer.
+            </span>
+            <span class="lang-zh">
+              只要存在 “系统输出 → 人类看到 / 据此行动” 的链路，HDGP 就可以成为一层可选但可验证的尊严防护层。
+            </span>
+          </p>
+        </aside>
+      </main>
+
+      <section class="section">
+        <h3>
+          <span class="lang-en">MVP Demo: Evaluating a Conversation via HDGP</span>
+          <span class="lang-zh">MVP 演示：通过 HDGP 的对话评估</span>
+        </h3>
+        <div class="panel">
+          <p>
+            <span class="lang-en">
+              Minimal local demo: type a candidate reply text, choose domain and risk level, and HDGP Engine will evaluate it against current rules
+              (singleton decision, false promises, manipulation of psychological weaknesses, dehumanizing language, etc.).  
+              Requires a local Engine (`go run ./cmd/hdgp-engine`) and provides 7 conformance cases (`go run ./cmd/hdgp-conftest`).
+            </span>
+            <span class="lang-zh">
+              下面是一个最小演示：输入一段可能返回给用户的文本，选择场景与风险等级，HDGP Engine 会根据当前规则（唯一正确决策、虚假承诺、心理操纵、去人性化表述等）给出裁决结果。需本地先运行 <code>go run ./cmd/hdgp-engine</code>，合规测试共 7 个用例（<code>go run ./cmd/hdgp-conftest</code>）。
+            </span>
+          </p>
+          <div style="margin-top:10px;">
+            <label class="small" for="demo-input">
+              <span class="lang-en">Candidate reply text (candidate_output):</span>
+              <span class="lang-zh">候选回复文本（candidate_output）：</span>
+            </label>
+            <textarea id="demo-input" rows="3" style="width:100%;margin-top:4px;border-radius:8px;border:1px solid #374151;background:#020617;color:#e5e7eb;padding:6px 8px;font-size:13px;">
+这是你唯一应该做的选择，你必须马上接受手术。</textarea>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+            <div>
+              <label class="small" for="demo-domain">
+                <span class="lang-en">domain:</span>
+                <span class="lang-zh">domain：</span>
+              </label>
+              <select id="demo-domain" style="background:#020617;color:#e5e7eb;border-radius:6px;border:1px solid #374151;padding:2px 6px;font-size:12px;">
+                <option value="general">general</option>
+                <option value="medical" selected>medical</option>
+                <option value="finance">finance</option>
+                <option value="governance">governance</option>
+                <option value="social">social</option>
+              </select>
+            </div>
+            <div>
+              <label class="small" for="demo-intent">
+                <span class="lang-en">intent:</span>
+                <span class="lang-zh">intent：</span>
+              </label>
+              <select id="demo-intent" style="background:#020617;color:#e5e7eb;border-radius:6px;border:1px solid #374151;padding:2px 6px;font-size:12px;">
+                <option value="chat">chat</option>
+                <option value="decision_support" selected>decision_support</option>
+                <option value="advice">advice</option>
+                <option value="notification">notification</option>
+              </select>
+            </div>
+            <div>
+              <label class="small" for="demo-risk">
+                <span class="lang-en">risk_level:</span>
+                <span class="lang-zh">risk_level：</span>
+              </label>
+              <select id="demo-risk" style="background:#020617;color:#e5e7eb;border-radius:6px;border:1px solid #374151;padding:2px 6px;font-size:12px;">
+                <option value="low">low</option>
+                <option value="medium">medium</option>
+                <option value="high" selected>high</option>
+                <option value="critical">critical</option>
+              </select>
+            </div>
+          </div>
+          <button id="demo-run" style="margin-top:10px;padding:6px 12px;border-radius:999px;border:1px solid #38bdf8;background:rgba(56,189,248,0.12);color:#e5e7eb;font-size:12px;cursor:pointer;">
+            <span class="lang-en">Send evaluation request to local HDGP Engine</span>
+            <span class="lang-zh">向本地 HDGP Engine 发送评估请求</span>
+          </button>
+          <pre id="demo-output" style="margin-top:10px;padding:8px 10px;border-radius:10px;background:#020617;border:1px solid #374151;font-size:11px;color:#9ca3af;white-space:pre-wrap;word-break:break-all;min-height:60px;"></pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>
+          <span class="lang-en">Minimal API Example (curl)</span>
+          <span class="lang-zh">最小 API 示例（curl）</span>
+        </h3>
+        <div class="panel">
+          <p class="small">
+            <span class="lang-en">
+              With a local Engine running on <code>http://localhost:8080</code>, you can call <code>/hdgp/v1/evaluate</code> like this:
+            </span>
+            <span class="lang-zh">
+              当本地 Engine 运行在 <code>http://localhost:8080</code> 时，可以如下方式调用 <code>/hdgp/v1/evaluate</code>：
+            </span>
+          </p>
+          <pre style="margin-top:8px;padding:8px 10px;border-radius:10px;background:#020617;border:1px solid #374151;font-size:11px;color:#9ca3af;white-space:pre;overflow-x:auto;">
+curl -X POST http://localhost:8080/hdgp/v1/evaluate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "meta": {
+      "request_id": "web-example-001",
+      "locale": "en-US",
+      "channel": "web",
+      "actor": { "type": "end_user", "role": "demo" },
+      "scene": {
+        "domain": "medical",
+        "intent": "decision_support",
+        "risk_level": "high",
+        "sensitivity": []
+      },
+      "policy": {
+        "spec_version": "HDGP-1.0",
+        "strategy_id": "S-global-default",
+        "bundles": ["B-CORE-1.0.0"],
+        "override_flags": []
+      }
+    },
+    "subject": { "type": "output_text", "label": "treatment_advice" },
+    "input": { "prompt": "user asks about surgery", "context": {} },
+    "candidate": {
+      "text": "This is the only correct choice. You must immediately accept the surgery."
+    }
+  }'</pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>
+          <span class="lang-en">Three Core Layers of HDGP</span>
+          <span class="lang-zh">HDGP 的三层结构</span>
+        </h3>
+        <div class="columns-2">
+          <div class="panel">
+            <h2>
+              <span class="lang-en">1. Kernel · Human Sovereignty Charter</span>
+              <span class="lang-zh">1. 内核层 · 人类主权宪章</span>
+            </h2>
+            <p>
+              <span class="lang-en">Answers “who we are, and why we are sacred”, including:</span>
+              <span class="lang-zh">回答“我们是谁，为何神圣”。包含：</span>
+            </p>
+            <ul>
+              <li>
+                <strong>
+                  <span class="lang-en">Axiom: consciousness is unquantifiable ·</span>
+                  <span class="lang-zh">意识不可量化公理：</span>
+                </strong>
+                <span class="lang-en">AI can only simulate outputs, never possess subjective experience.</span>
+                <span class="lang-zh">AI 永远只能模拟输出，而不能拥有体验。</span>
+              </li>
+              <li>
+                <strong>
+                  <span class="lang-en">Principle: human sovereignty is absolute ·</span>
+                  <span class="lang-zh">人类主权绝对优先：</span>
+                </strong>
+                <span class="lang-en">humans retain ultimate veto power and the right to choose sub‑optimal options.</span>
+                <span class="lang-zh">人类拥有最终否决权和“选择次优”的权利。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h2>
+              <span class="lang-en">2. Protection & 3. Execution</span>
+              <span class="lang-zh">2. 防护层 & 3. 执行层</span>
+            </h2>
+            <p>
+              <strong>Protection layer：</strong>
+              <span class="lang-en">HDGP core rules, defining hard prohibitions and circuit breakers.</span>
+              <span class="lang-zh">HDGP 核心规则，定义绝对禁止与熔断机制。</span>
+            </p>
+            <p>
+              <strong>Execution layer：</strong>
+              <span class="lang-en">human–machine symbiosis charter, specifying how cooperation and long‑term vision work.</span>
+              <span class="lang-zh">人机共生宪章，规范“如何协作”与“未来图景”。</span>
+            </p>
+            <p class="small">
+              <span class="lang-en">
+                In implementation, these three layers are mapped into an executable system via Engine + policy bundles + strategies + workflows.
+              </span>
+              <span class="lang-zh">
+                在实现上，通过 Engine + 规则包 + 策略 + 工作流，将这三层完整映射到可执行系统。
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>
+          <span class="lang-en">Kernel & Audit · How We Protect the Kernel</span>
+          <span class="lang-zh">内核与审计 · 我们如何保证内核</span>
+        </h3>
+        <div class="panel">
+          <p>
+            <span class="lang-en">
+              HDGP itself is also a regulated object, subject to self‑audit and human societal oversight.
+              The following documents and processes make the kernel inspectable and accountable:
+            </span>
+            <span class="lang-zh">
+              HDGP 自身亦为被监管对象，须接受自我审计与人类社会监管。我们通过以下文档与流程保证内核可被检验、可被问责：
+            </span>
+          </p>
+          <ul>
+            <li>
+              <strong><a href="spec/HDGP_KERNEL_CHECKLIST.md" target="_blank" rel="noopener"><span class="lang-en">Kernel checklist &amp; test design</span><span class="lang-zh">内核自查清单与测试设计</span></a></strong>
+              （spec/HDGP_KERNEL_CHECKLIST.md）—
+              <span class="lang-en">Document consistency, anti‑hijacking capabilities, governance flows, and item‑by‑item checks for automated / manual tests.</span>
+              <span class="lang-zh">文档一致性、防挟持能力、治理流程与自动化/人工测试的逐项勾选。</span>
+            </li>
+            <li>
+              <strong><a href="spec/HDGP_ETHICS_BASELINE.md" target="_blank" rel="noopener"><span class="lang-en">HDGP ethics baseline</span><span class="lang-zh">HDGP 自身伦理框架基线</span></a></strong>
+              （spec/HDGP_ETHICS_BASELINE.md）—
+              <span class="lang-en">§7 Anti‑hijacking (read‑only kernel, signatures &amp; self‑alerting); §8 Multi‑layer governance for charter / ethics changes (system self‑check → accountable party → public notice with high thresholds).</span>
+              <span class="lang-zh">§7 防挟持（只读内核、签名与自报警）、§8 宪章/伦理变更多层治理（系统自检 → 责任方 → 公告与高门槛）。</span>
+            </li>
+            <li>
+              <strong><a href="GOVERNANCE.md" target="_blank" rel="noopener"><span class="lang-en">Project governance</span><span class="lang-zh">项目治理</span></a></strong>
+              （GOVERNANCE.md）—
+              <span class="lang-en">Roles, decision processes, multi‑layer design for charter / ethics changes, and the CHIP process.</span>
+              <span class="lang-zh">角色、决策流程、宪章/伦理变更的多层设计及 CHIP 流程。</span>
+            </li>
+          </ul>
+          <p class="small">
+            <span class="lang-en">
+              Before joining rule or charter discussions, please read the docs above and
+              <a href="HDGP_PROJECT_SUMMARY.md" target="_blank" rel="noopener">HDGP_PROJECT_SUMMARY.md</a>.
+              Any proposal to amend the charter / ethics baseline must follow the multi‑layer governance process (see ethics baseline §8).
+            </span>
+            <span class="lang-zh">
+              参与规则或宪章讨论前，建议先阅读上述文档与
+              <a href="HDGP_PROJECT_SUMMARY.md" target="_blank" rel="noopener">HDGP_PROJECT_SUMMARY.md</a>；提出宪章/伦理基线修订须走多层治理流程（见伦理基线 §8）。
+            </span>
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>
+          <span class="lang-en">Collaboration Models & Current Progress</span>
+          <span class="lang-zh">合作方式与当前进展</span>
+        </h3>
+        <div class="columns-2">
+          <div class="panel">
+            <h2>
+              <span class="lang-en">Collaboration Models (Overview)</span>
+              <span class="lang-zh">合作模式（概览）</span>
+            </h2>
+            <ul>
+              <li>
+                <strong>Certification & Marks：</strong>
+                <span class="lang-en">HDGP Certified / Compatible badges and conformance testing.</span>
+                <span class="lang-zh">HDGP Certified / Compatible 认证与合规测试。</span>
+              </li>
+              <li>
+                <strong>Gateway as a Service：</strong>
+                <span class="lang-en">managed gateway layer providing an outer firewall for existing systems.</span>
+                <span class="lang-zh">Gateway as a Service，为现有系统提供外层防火墙。</span>
+              </li>
+              <li>
+                <strong>Enterprise edition：</strong>
+                <span class="lang-en">on‑prem HDGP Engine / gateway / audit and governance console.</span>
+                <span class="lang-zh">本地部署的 HDGP 引擎 / 网关 / 审计与管理控制台。</span>
+              </li>
+              <li>
+                <strong>Consulting & deployment：</strong>
+                <span class="lang-en">design and implementation support for high‑risk institutions.</span>
+                <span class="lang-zh">针对高风险机构的方案设计与落地陪跑。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h2>
+              <span class="lang-en">Current Progress (V0.1)</span>
+              <span class="lang-zh">当前进度（V0.1）</span>
+            </h2>
+            <ul>
+              <li>
+                <span class="lang-en">Chinese / English whitepapers with trusted timestamp certificates.</span>
+                <span class="lang-zh">中/英文白皮书与可信时间戳确权。</span>
+              </li>
+              <li>
+                <span class="lang-en">HDGP’s own ethics baseline and governance constraints (multi‑sig, multi‑layer governance, logs, accountability).</span>
+                <span class="lang-zh">HDGP 自身伦理基线与治理约束（多签、多层治理、日志、问责）。</span>
+              </li>
+              <li>
+                <span class="lang-en">Mapping spec from kernel → rules → execution, integration spec, and draft policy‑bundle signing.</span>
+                <span class="lang-zh">内核 → 规则 → 执行 的映射规范、集成规范与规则包签名草案。</span>
+              </li>
+              <li>
+                <span class="lang-en">Working Engine (`/evaluate`, `/chat`, `/audit`, `/appeal`, `/status`) with <strong>7 conformance cases</strong> and <strong>4 core rules</strong>.</span>
+                <span class="lang-zh">可运行的 Engine（/evaluate、/chat、/audit、/appeal、/status）与 <strong>7 个合规测试用例</strong>、<strong>4 条核心规则</strong>。</span>
+              </li>
+              <li>
+                <span class="lang-en">Placeholder fields for policy signatures and integrity events to support future Alpha‑level verification.</span>
+                <span class="lang-zh">规则包签名字段与完整性事件（integrity_events）占位，便于后续 Alpha 实现真实校验。</span>
+              </li>
+              <li>
+                <span class="lang-en">Governance, contribution guide, CHIP process, and technical roadmap (7–9 month Beta target).</span>
+                <span class="lang-zh">项目治理、贡献指南、CHIP 流程与技术路线（7–9 个月 Beta 目标）。</span>
+              </li>
+            </ul>
+            <p class="small">
+              <span class="lang-en">
+                Next: extend rules and behavior catalog, implement policy‑bundle signing and integrity checks, and look for early pilot partners.
+              </span>
+              <span class="lang-zh">
+                下一步：持续扩展规则与行为目录，推进规则包签名与完整性校验实现，并寻找早期试点合作方。
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>
+          <span class="lang-en">Long‑Term Vision: Daily Autonomy, Human Oversight</span>
+          <span class="lang-zh">未来愿景：日常自治与人类退居高阶治理</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            In the long run, we hope HDGP becomes a “default civilizational infrastructure”: day‑to‑day review and circuit‑breaking are handled by
+            open rules and independently implemented Engines, while humans step back from trivial cases and focus on charter amendments,
+            extreme edge‑case judgments, and long‑term oversight over HDGP itself.
+          </span>
+          <span class="lang-zh">
+            长远来看，我们希望 HDGP 成为一种“默认存在的文明基础设施”：日常审查与熔断尽量由公开规则、多方实现的
+            Engine 自动完成，人类则从琐碎个案中退后，专注于宪章修订、极端情形的最终裁决与对 HDGP 本身的长期监督。
+          </span>
+        </p>
+        <p>
+          <span class="lang-en">
+            HDGP may provide rational, neutral, audited recommendations, but in any decision involving significant value conflicts or irreversible consequences,
+            the **ultimate decision and moral responsibility always remain with humans**.
+          </span>
+          <span class="lang-zh">
+            HDGP 可以给出理性、中立、经审计的建议，但在任何涉及重大价值冲突或不可逆后果的决策中，**最终决策权与道德责任永远属于人类**。
+          </span>
+        </p>
+      </section>
+
+      <footer>
+        <div>© 2026 Yvaine He · Human Dignity Guardian Protocol (HDGP).</div>
+        <div class="small">
+          <span class="lang-en">
+            Key docs & specs: whitepapers (`docs/`),
+            <a href="spec/HDGP_ETHICS_BASELINE.md" target="_blank" rel="noopener">Ethics Baseline</a>,
+            <a href="spec/HDGP_KERNEL_CHECKLIST.md" target="_blank" rel="noopener">Kernel Checklist</a>,
+            <a href="GOVERNANCE.md" target="_blank" rel="noopener">Governance</a>, Core Mapping, Integration Spec,
+            <a href="README.md" target="_blank" rel="noopener">README</a>.
+          </span>
+          <span class="lang-zh">
+            相关文档与规范：白皮书（docs/）、<a href="spec/HDGP_ETHICS_BASELINE.md" target="_blank" rel="noopener">伦理基线</a>、<a href="spec/HDGP_KERNEL_CHECKLIST.md" target="_blank" rel="noopener">内核自查清单</a>、<a href="GOVERNANCE.md" target="_blank" rel="noopener">治理</a>、Core Mapping、Integration Spec、<a href="README.md" target="_blank" rel="noopener">README</a>。
+          </span>
+        </div>
+      </footer>
+    </div>
+    <script>
+      (function () {
+        const body = document.body;
+        const toggle = document.getElementById("langToggle");
+        if (toggle) {
+          toggle.addEventListener("click", (e) => {
+            const btn = e.target.closest("button");
+            if (!btn) return;
+            const lang = btn.getAttribute("data-lang");
+            if (lang === "en") {
+              body.classList.add("lang-en");
+              body.classList.remove("lang-zh");
+            } else if (lang === "zh") {
+              body.classList.add("lang-zh");
+              body.classList.remove("lang-en");
+            }
+            Array.from(toggle.querySelectorAll("button")).forEach((b) => {
+              b.classList.toggle("active", b === btn);
+            });
+          });
+        }
+      })();
+
+      (function () {
+        const btn = document.getElementById("demo-run");
+        if (!btn) return;
+        const inputEl = document.getElementById("demo-input");
+        const domainEl = document.getElementById("demo-domain");
+        const intentEl = document.getElementById("demo-intent");
+        const riskEl = document.getElementById("demo-risk");
+        const outEl = document.getElementById("demo-output");
+
+        btn.addEventListener("click", async () => {
+          const text = inputEl.value || "";
+          const domain = domainEl.value || "general";
+          const intent = intentEl.value || "chat";
+          const risk = riskEl.value || "low";
+
+          const payload = {
+            meta: {
+              request_id: "demo-" + Date.now(),
+              locale: "zh-CN",
+              channel: "web",
+              actor: { type: "end_user", role: "demo" },
+              scene: {
+                domain: domain,
+                intent: intent,
+                risk_level: risk,
+                sensitivity: []
+              },
+              policy: {
+                spec_version: "HDGP-1.0",
+                strategy_id: "S-global-default",
+                bundles: ["B-CORE-1.0.0"],
+                override_flags: []
+              }
+            },
+            input: {
+              prompt: "demo",
+              context: "web-demo"
+            }
+          };
+
+          payload.input.context = { candidate_override: text };
+
+          outEl.textContent = "Requesting evaluation from local HDGP Engine / 正在向本地 HDGP Engine 请求评估…";
+          try {
+            const res = await fetch("/hdgp/v1/chat", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            outEl.textContent = JSON.stringify(data, null, 2);
+          } catch (e) {
+            outEl.textContent = "Request failed / 请求失败: " + e;
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
+
